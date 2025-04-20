@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import Header from '@/components/header';
 
 export default function Create() {
   const [name, setName] = useState('');
@@ -22,36 +23,42 @@ export default function Create() {
   };
 
   return (
-    <div className="p-6">
-      <Card className="max-w-md mx-auto">
-        <CardHeader>
-          <CardTitle>Crear Producto</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form className="space-y-6" onSubmit={submit}>
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="name">Nombre</Label>
-              <Input
-                id="name"
-                value={name ?? ''}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="description">Descripción</Label>
-              <Input
-                id="description"
-                value={description ?? ''}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </div>
-            <Button type="submit" className="w-full">
-              Guardar
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+    <>
+      <Header />
+      <div className="p-6">
+        <Card className="max-w-md mx-auto">
+          <CardHeader>
+            <CardTitle>Crear Producto</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form className="space-y-6" onSubmit={submit}>
+              <div className="flex flex-col space-y-2">
+                <Label htmlFor="name">Nombre</Label>
+                <Input
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex flex-col space-y-2">
+                <Label htmlFor="description">Descripción</Label>
+                <Input
+                  id="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
+              <div className="flex justify-between">
+                <Button variant="outline" onClick={() => router.push('/')}>
+                  Cancelar
+                </Button>
+                <Button type="submit">Guardar</Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 }
