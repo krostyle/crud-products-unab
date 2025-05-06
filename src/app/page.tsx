@@ -1,83 +1,47 @@
 'use client';
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import Header from '@/components/header';
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  description?: string;
-}
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  const [products, setProducts] = useState<Product[]>([]);
-  useEffect(() => {
-    fetch('/api/products')
-      .then((r) => r.json())
-      .then(setProducts);
-  }, []);
+  const router = useRouter();
+  const [isRedirecting, setIsRedirecting] = useState(true);
 
+  useEffect(() => {
+    // Verificar si hay un usuario en localStorage
+    const user = localStorage.getItem('user');
+    if (user) {
+      // Si hay usuario, redirigir a productos
+      router.push('/products');
+    } else {
+      // Si no hay usuario, redirigir a login
+      router.push('/login');
+    }
+
+    // Establecer un temporizador para evitar que la página quede
+    // eternamente en "Cargando..." si hay un problema con la redirección
+    const timer = setTimeout(() => {
+      setIsRedirecting(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [router]);
+
+  // Mostramos un mensaje de carga mientras se redirige
   return (
-    <>
-      <Header />
-      <div className="p-6 space-y-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Listado de Productos</CardTitle>
-            <Link href="/create">
-              <Button>Nuevo Producto</Button>
-            </Link>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Nombre</TableHead>
-                  <TableHead>Descripción</TableHead>
-                  <TableHead>Acciones</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {products.map((p) => (
-                  <TableRow key={p.id}>
-                    <TableCell>{p.name}</TableCell>
-                    <TableCell>{p.description}</TableCell>
-                    <TableCell className="space-x-2">
-                      <Link href={`/edit/${p.id}`}>
-                        <Button size="sm">Editar</Button>
-                      </Link>
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                        onClick={() =>
-                          fetch(`/api/products/${p.id}`, {
-                            method: 'DELETE',
-                          }).then(() =>
-                            setProducts(products.filter((x) => x.id !== p.id)),
-                          )
-                        }
-                      >
-                        Eliminar
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </div>
-    </>
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <p className="text-xl mb-4">Cargando...</p>
+      {!isRedirecting && (
+        <p className="text-sm text-gray-500">
+          Si no eres redirigido automáticamente,
+          <button
+            onClick={() => router.push('/login')}
+            className="text-blue-500 ml-1 hover:underline"
+          >
+            haz clic aquí
+          </button>
+        </p>
+      )}
+    </div>
   );
 }

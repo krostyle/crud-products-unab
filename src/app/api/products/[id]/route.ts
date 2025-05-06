@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ProductsController } from '@/products/adapters/controllers/products.controller';
+import { ProductsController } from '@/modules/products/adapters/controllers/products.controller';
 
 export const GET = async (
   _req: NextRequest,
