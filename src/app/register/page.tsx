@@ -34,7 +34,7 @@ export default function RegisterPage() {
         body: JSON.stringify({ name, email, password }),
       });
 
-      const data = await response.json();
+      await response.json();
 
       if (!response.ok) {
         throw new Error('Error al registrar usuario');
@@ -44,7 +44,7 @@ export default function RegisterPage() {
       alert('Usuario registrado correctamente. Por favor, inicia sesión.');
       router.push('/login');
     } catch (err: any) {
-      setError('Error al registrar usuario');
+      setError(err.message || 'Error al registrar usuario');
     } finally {
       setIsLoading(false);
     }

@@ -1,4 +1,3 @@
-import { MongoProductRepository } from '@/modules/products/adapters/repositories/mongodb/mongo-product-repository';
 import { GetAllProductsUseCase } from '@/modules/products/application/use-cases/get-all-products.use-case';
 import { NextResponse } from 'next/server';
 import { CreateProductUseCase } from '@/modules/products/application/use-cases/create-product.use-case';
